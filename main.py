@@ -69,12 +69,29 @@ cyprus.open_spi()
 # ////////////////////////////////////////////////////////////////
 sm = ScreenManager()
 ramp = stepper(port = 0, speed = INIT_RAMP_SPEED)
+onGate = False
 
 # ////////////////////////////////////////////////////////////////
 # //                       MAIN FUNCTIONS                       //
 # //             SHOULD INTERACT DIRECTLY WITH HARDWARE         //
 # ////////////////////////////////////////////////////////////////
-	
+def binary_state(self):
+    global onGate
+    cyprus.initialize()
+    cyprus.setup_servo(2)
+    if onGate:
+        cyprus.set_servo_position(2, 0.5)
+        onGate = True
+    else:
+        cyprus.set_servo_position(2, 0.05)
+        onGate = False
+
+
+
+
+
+
+
 # ////////////////////////////////////////////////////////////////
 # //        DEFINE MAINSCREEN CLASS THAT KIVY RECOGNIZES        //
 # //                                                            //
@@ -96,6 +113,7 @@ class MainScreen(Screen):
 
     def toggleGate(self):
         print("Open and Close gate here")
+        binary_state(self)
 
     def toggleStaircase(self):
         print("Turn on and off staircase here")
